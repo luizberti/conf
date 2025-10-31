@@ -70,7 +70,10 @@
     in {
       default = with pkgs;
         mkShellNoCC {
-          nativeBuildInputs = with pkgs; [fish neovim git age age-plugin-yubikey];
+          nativeBuildInputs = with pkgs; [fish neovim git age age-plugin-yubikey]
+            ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+              darwin.packages.${system}.darwin-rebuild
+            ];
           shellHook = ''
             export EDITOR=nvim
             exec fish
@@ -78,7 +81,7 @@
         };
     });
 
-    darwinConfigurations.ares = darwin.lib.darwinSystem {
+    darwinConfigurations.selene = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       specialArgs = inputs // {inherit user;};
       modules = [
@@ -99,7 +102,7 @@
           };
         }
 
-        ./hosts/ares.nix
+        ./hosts/selene.nix
       ];
     };
 
