@@ -7,7 +7,7 @@
   # user = "%USER%"; # FIXED: Commented out - using user from specialArgs instead
 in {
   imports = [
-    ../../modules/darwin/home-manager.nix
+    ../home.nix
   ];
 
   nixpkgs.config = {

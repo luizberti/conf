@@ -23,4 +23,9 @@
   # uv
 
   # jetbrains-mono
+
+  # Shell enhancements
+  starship
+  zoxide
+  eza
 ]

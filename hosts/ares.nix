@@ -6,7 +6,7 @@
   user = "%USER%";
 in {
   imports = [
-    ../../modules/darwin/home-manager.nix
+    ../home.nix
   ];
 
   nixpkgs.config = {

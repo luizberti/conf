@@ -3,11 +3,12 @@
   pkgs,
   lib,
   home-manager,
+  user, # FIXED: Accept user from specialArgs in flake.nix
   ...
 }: let
-  user = "%USER%";
-  name = "%NAME%";
-  mail = "%EMAIL%";
+  # user = "%USER%"; # FIXED: Commented out - using user from specialArgs instead
+  name = "%NAME%"; # TODO: Replace with actual name or accept from specialArgs
+  mail = "%EMAIL%"; # TODO: Replace with actual email or accept from specialArgs
   # Define the content of your file as a derivation
   # myEmacsLauncher = pkgs.writeScript "emacs-launcher.command" ''
   #   #!/bin/sh
@@ -19,6 +20,9 @@ in {
   # imports = [
   #  ./dock.nix
   # ];
+
+  # Enable fish shell program
+  programs.fish.enable = true;
 
   # It me
   users.users.${user} = {
@@ -59,7 +63,7 @@ in {
     }: {
       home = {
         enableNixpkgsReleaseCheck = false;
-        packages = pkgs.callPackage ./packages.nix {};
+        packages = pkgs.callPackage ./pkgs.nix {};
         file = lib.mkMerge [
           # sharedFiles
           # additionalFiles
@@ -68,7 +72,43 @@ in {
         stateVersion = "23.11";
       };
       programs = {
-        # fish
+        fish = {
+          enable = true;
+          shellInit = ''
+            set --universal --export EDITOR               nvim
+            set --universal --export DO_NOT_TRACK         1
+            set --universal --export NIXPKGS_ALLOW_UNFREE 1
+          '';
+          shellAliases = {
+            co = "container";
+            ku = "kubectl";
+            kc = "kubectx";
+            kn = "kubens";
+
+            vim = "nvim";
+            http = "curlie";
+
+            z = "zoxide";
+            ".." = "cd ..";
+            "..." = "cd ../..";
+            "...." = "cd ../../..";
+            "....." = "cd ../../../..";
+
+            gs = "git status";
+            ls = "eza --group-directories-first";
+            la = "eza --all --group-directories-first";
+            ll = "eza --long --git --time-style=long-iso --group-directories-first";
+            lls = "eza -la -s modified";
+            lla = "ll --all";
+            tre = "eza --all --classify --tree --group-directories-first --ignore-glob='.git|.jj|target|zig-out|.zig-cache|node_modules|.vscode|.idea'";
+          };
+          interactiveShellInit = ''
+            # INITIALIZE INTEGRATIONS
+            starship init fish | source
+            zoxide init fish | source
+            #atuin init fish | source
+          '';
+        };
 
         # git = {
         #   enable = true;
