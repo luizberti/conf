@@ -21,15 +21,26 @@ in {
   #  ./dock.nix
   # ];
 
-  # Enable fish shell program
   programs.fish.enable = true;
+  # Enable fish shell program at system level
+  #programs.fish = {
+  #  enable = true;
+  #  # Enable vendor completions/config/functions for proper nix-darwin integration
+  #  vendor.config.enable = true;
+  #  vendor.completions.enable = true;
+  #  vendor.functions.enable = true;
+  #};
 
   # It me
+  # NOTE: knownUsers and uid are required for nix-darwin to actually manage the user shell
+  # See: https://github.com/nix-darwin/nix-darwin/issues/1237
+  users.knownUsers = [user];
   users.users.${user} = {
     name = "${user}";
     home = "/Users/${user}";
     isHidden = false;
     shell = pkgs.fish;
+    uid = 501;
   };
 
   homebrew = {
@@ -64,6 +75,12 @@ in {
       home = {
         enableNixpkgsReleaseCheck = false;
         packages = pkgs.callPackage ./pkgs.nix {};
+
+        sessionPath = [
+          "$HOME/.bun/bin"
+          "$HOME/.deno/bin"
+        ];
+
         file = lib.mkMerge [
           # sharedFiles
           # additionalFiles

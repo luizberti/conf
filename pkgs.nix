@@ -3,9 +3,13 @@
   htop
   btop
   bat
+  eza
+  fzf
   fd
   jq
   ripgrep
+  starship
+  zoxide
 
   curl
   curlie
@@ -14,18 +18,15 @@
   gh
   opentofu
   openbao
-  kubectl # TODO: kubectx kubens
-  fzf
+  kubectl
+  kubie
 
   go
+  bun
+  deno
   # zig
   # fenix (rust)
   # uv
 
   # jetbrains-mono
-
-  # Shell enhancements
-  starship
-  zoxide
-  eza
 ]
